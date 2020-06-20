@@ -1,0 +1,71 @@
+# 端口号
+server:
+  port: 8080
+  servlet:
+      context-path: /base/
+
+#数据库配置
+spring:
+  application:
+    name: base-spring
+  datasource:
+    #JDBC-mysql
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=UTC
+    #JDBC-oracle
+    #url: jdbc:oracle:thin:@10.1.5.16:1521:orcl
+    username: root
+    password: 123456
+
+    driver-class-name: com.mysql.jdbc.Driver
+    #driver-class-name: oracle.jdbc.OracleDriver
+    type: com.alibaba.druid.pool.DruidDataSource
+    # 连接池配置,下面配置说明请参考Druid Github Wiki，配置_DruidDataSource参考配置
+    druid:
+      initialSize: 1
+      minIdle: 1
+      maxActive: 500
+      min-evictable-idle-time-millis: 100000
+      #validation-query: select 1
+      validation-query: select 1 from dual
+      keepAlive: true  #应用、数据库部署在不同区域，避免防火墙清理空闲连接， druid version >1.0.28
+      ######Druid监控配置######
+      #下面配置说明请参考Druid Github Wiki，配置_配置WebStatFilter
+      filters: stat
+      filter:
+        stat:
+          slowSqlMillis: 1000  #10ms 为慢sql
+          logSlowSql: true
+      web-stat-filter:
+        exclusions: '*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*'
+      #下面配置说明请参考Druid Github Wiki，配置_StatViewServlet配置
+      stat-view-servlet:
+        enabled: true
+        #login-username: druid
+        #login-password: druid
+
+#redis配置
+cache:
+  redis:
+    encryption: false
+    userCluster: false
+    enabled: true
+    hosts: 127.0.0.1
+    port: 6379
+    maxIdle: 10
+    maxWait: 1000000
+    maxConnection: 300
+    userName:
+    password:
+  # redis集群
+#  redisCluster:
+#    hosts: 36.33.238.23:7001,36.33.238.23:7002,36.33.238.23:7003,36.33.238.33:7001,36.33.238.33:7002,36.33.238.33:7003
+
+#mybatis相关配置
+#mybatis:
+#  config-location: classpath:mybatis/mybatis-config.xml
+#  mapper-locations: classpath*:mybatis/mapper/*/*.xml
+#  defaultCorpBrNoIntercept: classpath:mybatis/intercept/defaultCorpBrNo.xml
+#  deleteIntercept: classpath:mybatis/intercept/deleteReg.xml
+#  updateIntercept: classpath:mybatis/intercept/updateReg.xml
+#  sqlCollectInterceptor: classpath:mybatis/intercept/sqlCollect.xml
+#  enableCollect: true
